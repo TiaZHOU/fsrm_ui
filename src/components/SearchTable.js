@@ -1,82 +1,62 @@
-import React from 'react';
-import data from '../data/data.json';
-class SearchTable extends React.Component {
-    state = {
-        actorName: '',
-        totalShows: 0,
-        servingTimes: 0,
-        firstShowDate: null,
-        lastShowDate: null,
-        mostPartner: '',
-    };
+import React, { useMemo } from 'react';
 
-    onActorNameChange = e => {
-        this.setState({ actorName: e.target.value }, this.calculateStatistics);
-    };
+const ActorDetails = ({ data, actor }) => {
+    const actorData = useMemo(() => {
+        const actorShows = data.filter(show => {
+            const castValues = Object.values(show.cast);
+            return castValues.includes(actor);
+        });
 
-    calculateStatistics = () => {
+        const servingTimes = actorShows.filter(show => {
+            return show.serving.desk === actor || show.serving.viceDesk === actor;
+        }).length;
 
+        const sortedDates = actorShows
+            .map(show => new Date(show.date))
+            .sort((a, b) => a - b);
 
-        const filteredData = data.filter(item => Object.values(item.cast).includes(this.state.actorName) || Object.values(item.serving).includes(this.state.actorName));
+        const firstShowDate = sortedDates[0];
+        const lastShowDate = sortedDates[sortedDates.length - 1];
+        const daysBetweenShows = Math.round(
+            (lastShowDate - firstShowDate) / (1000 * 60 * 60 * 24)
+        );
 
-        let totalShows = filteredData.length;
-        let servingTimes = filteredData.reduce((total, show) => total + (Object.values(show.serving).includes(this.state.actorName) ? 1 : 0), 0);
-
-        let firstShowDate = null;
-        let lastShowDate = null;
-
-        if (filteredData.length > 0) {
-            firstShowDate = new Date(filteredData[0].date);
-            lastShowDate = new Date(filteredData[filteredData.length - 1].date);
-        }
-
-        let daysBetween = firstShowDate && lastShowDate ? Math.round((lastShowDate - firstShowDate) / (1000 * 60 * 60 * 24)) : null;
-
-        let partnerCount = {};
-
-        filteredData.forEach(item => {
-            Object.values(item.cast).forEach(name => {
-                if (name !== this.state.actorName) {
-                    if (!partnerCount[name]) {
-                        partnerCount[name] = 0;
-                    }
-                    partnerCount[name]++;
-                }
-            });
-            Object.values(item.serving).forEach(name => {
-                if (name !== this.state.actorName) {
-                    if (!partnerCount[name]) {
-                        partnerCount[name] = 0;
-                    }
-                    partnerCount[name]++;
+        const actorsWorkedWith = {};
+        actorShows.forEach(show => {
+            Object.values(show.cast).forEach(otherActor => {
+                if (otherActor !== actor) {
+                    actorsWorkedWith[otherActor] = (actorsWorkedWith[otherActor] || 0) + 1;
                 }
             });
         });
 
-        let mostPartner = Object.keys(partnerCount).reduce((a, b) => partnerCount[a] > partnerCount[b] ? a : b, '');
-        this.setState({ totalShows, servingTimes, firstShowDate, lastShowDate, daysBetween, mostPartner });
-    };
-
-    render() {
-        const { actorName, totalShows, servingTimes, firstShowDate, lastShowDate, daysBetween, mostPartner } = this.state;
-
-        return (
-            <div>
-                <h1>Show Statistics for Actor</h1>
-                <input type="text" value={actorName} onChange={this.onActorNameChange} placeholder="Enter actor name..." />
-                {actorName && (
-                    <div>
-                        <p>Total shows number: {totalShows}</p>
-                        <p>Serving times: {servingTimes}</p>
-                        <p>First show date: {firstShowDate ? firstShowDate.toISOString().substring(0, 10) : '-'}</p>
-                        <p>Last show date: {lastShowDate ? lastShowDate.toISOString().substring(0, 10) : '-'}</p>
-                        <p>Days between first and last show: {daysBetween}</p>
-                        <p>Most Acting with: {mostPartner}</p>
-                    </div>
-                )}
-            </div>
+        const mostActedWith = Object.keys(actorsWorkedWith).reduce((a, b) =>
+            actorsWorkedWith[a] > actorsWorkedWith[b] ? a : b
         );
-    }
-}
 
-export default SearchTable;
+        return {
+            totalShows: actorShows.length,
+            servingTimes,
+            firstShowDate,
+            lastShowDate,
+            daysBetweenShows,
+            mostActedWith,
+        };
+    }, [data, actor]);
+
+    return (
+        <div>
+            <h2>{actor}</h2>
+            <p>Total shows number: {actorData.totalShows}</p>
+            <p>Serving times: {actorData.servingTimes}</p>
+            <p>First show date: {actorData.firstShowDate.toLocaleDateString()}</p>
+            <p>Last show date: {actorData.lastShowDate.toLocaleDateString()}</p>
+            <p>
+                Days between first and last show: {actorData.daysBetweenShows}
+            </p>
+            <p>Most Acting with: {actorData.mostActedWith}</p>
+        </div>
+    );
+};
+
+export default ActorDetails;
