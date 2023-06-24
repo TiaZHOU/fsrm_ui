@@ -7,9 +7,11 @@ const ActorDetails = ({ data, actor }) => {
             return castValues.includes(actor);
         });
 
-        const servingTimes = actorShows.filter(show => {
-            return show.serving.desk === actor || show.serving.viceDesk === actor;
-        }).length;
+        //count the number of times the actor occurs in the serving section
+        const timesServed = actorShows.reduce((total, show) => {
+            return total + Object.values(show.serving).filter(served => served === actor).length;
+        }, 0);
+
 
         const sortedDates = actorShows
             .map(show => new Date(show.date))
@@ -30,13 +32,19 @@ const ActorDetails = ({ data, actor }) => {
             });
         });
 
-        const mostActedWith = Object.keys(actorsWorkedWith).reduce((a, b) =>
-            actorsWorkedWith[a] > actorsWorkedWith[b] ? a : b
-        );
+        const mostActedWith = Object.keys(actorsWorkedWith).reduce((mostActed, currentActor) => {
+            if (!mostActed.length || actorsWorkedWith[currentActor] > actorsWorkedWith[mostActed[0]]) {
+                return [currentActor];
+            } else if (actorsWorkedWith[currentActor] === actorsWorkedWith[mostActed[0]]) {
+                mostActed.push(currentActor);
+            }
+            return mostActed;
+        }, []);
+
 
         return {
             totalShows: actorShows.length,
-            servingTimes,
+            timesServed,
             firstShowDate,
             lastShowDate,
             daysBetweenShows,
@@ -48,7 +56,7 @@ const ActorDetails = ({ data, actor }) => {
         <div>
             <h2>{actor}</h2>
             <p>Total shows number: {actorData.totalShows}</p>
-            <p>Serving times: {actorData.servingTimes}</p>
+            <p>Serving times: {actorData.timesServed}</p>
             <p>First show date: {actorData.firstShowDate.toLocaleDateString()}</p>
             <p>Last show date: {actorData.lastShowDate.toLocaleDateString()}</p>
             <p>

@@ -45,6 +45,12 @@ const RoleFilter = () => {
                     {role}
                 </button>
             ))}
+            <button onClick={()=>{
+                setSelectedRole();
+                setSelectedActor();
+                setRoles([]);
+                setFilteredActors([])}}>
+                Reset</button>
             {selectedRole && <h3>Actors who played {selectedRole}:</h3>}
             {filteredActors.map(actor => <button key={actor} onClick={() => handleActorClick(actor)}>{actor}</button>)}
             {selectedActor && <SearchTable actor={selectedActor} data={data} />}
