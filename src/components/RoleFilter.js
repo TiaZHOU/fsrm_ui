@@ -57,7 +57,7 @@ const RoleFilter = () => {
                 setRoles([]);
                 setFilteredActors([])}}>
                 Reset</button>
-            {selectedRole && <h3> {selectedRole} 演员列表:</h3>}
+            {selectedRole && <h3> {selectedRole} 演员列表（按上场顺序）:</h3>}
             {filteredActors.map((actor, index) =>(
                     <React.Fragment key={actor}>
                         <button onClick={() => handleActorClick(actor)}>
