@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import SearchTable from './SearchTable';
 import data from '../data/data.json';
 import ActorDetails from "./ShowTable";
 const RoleFilter = () => {
