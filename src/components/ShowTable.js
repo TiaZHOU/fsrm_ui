@@ -36,10 +36,8 @@ const ActorDetails = ({ actor, data }) => {
         const actorsWorkedWith = {};
         actorShows.forEach(show => {
             Object.values(show.cast).forEach(name => {
-                if(name !== actor) {
                     if(actorsWorkedWith[name]) actorsWorkedWith[name]++;
                     else actorsWorkedWith[name] = 1;
-                }
             });
         });
 
@@ -71,19 +69,23 @@ const ActorDetails = ({ actor, data }) => {
     return (
         <div>
             <h1>{actor}</h1>
-            <h2>Show Count: {details.showCount - details.servingCount}</h2>
-            <h2>First Day: {details.firstDay}</h2>
-            <h2>Last Day: {details.lastDay}</h2>
-            <h2>Days Between: {details.daysBetween}</h2>
-            <h2>Role Counts:</h2>
+            <h2>一共参加演出: {details.showCount} 场</h2>
+            <h2>第一次正式演出: {details.firstDay}</h2>
+            <h2>最后一次正式演出: {details.lastDay}</h2>
+            <h2>中间间隔了: {details.daysBetween} 天</h2>
+            <h2>角色统计:</h2>
             <ul>
-                {Object.entries(details.roleCounts).map(([role, count]) => <li key={role}>{role}: {count}</li>)}
+                {Object.entries(details.roleCounts).map(([role, count]) => <li key={role}>{role}: {count} 场</li>)}
             </ul>
-            <h2>Most Worked With: {details.mostWorkedWith}</h2>
-            <h2>Serving Count: {details.servingCount}</h2>
-            <h2>Never Worked With:</h2>
+            {details.servingCount >0 && <li>前台: {details.servingCount} 场</li>}
+            <h2>很遗憾，有很多人还没有合作过:</h2>
             <ul>
-                {details.neverWorkedWith.map(actor => <li key={actor}>{actor}</li>)}
+                {details.neverWorkedWith.map((actor,index) =>(
+                    <React.Fragment key={actor}>
+                        <text key={actor}>{actor}- </text>
+                     {(index + 1) % 5 === 0 && <br />}
+                    </React.Fragment>)
+            )}
             </ul>
         </div>
     );

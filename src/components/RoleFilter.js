@@ -41,12 +41,13 @@ const RoleFilter = () => {
         <div>
             <div>
                 <h1>浮生若梦 演出报告</h1>
-                <h2>演过的角色</h2>
+                <h2>角色</h2>
                 {roles.map((role, index) => (
                     <React.Fragment key={role}>
                         <button onClick={() => handleRoleClick(role)}>
                             {role}
                         </button>
+                        <text> </text>
                         {(index + 1) % 5 === 0 && <br />}
                     </React.Fragment>
                 ))}
@@ -58,7 +59,16 @@ const RoleFilter = () => {
                 setFilteredActors([])}}>
                 Reset</button>
             {selectedRole && <h3> {selectedRole} 演员列表:</h3>}
-            {filteredActors.map(actor => <button key={actor} onClick={() => handleActorClick(actor)}>{actor}</button>)}
+            {filteredActors.map((actor, index) =>(
+                    <React.Fragment key={actor}>
+                        <button onClick={() => handleActorClick(actor)}>
+                            {actor}
+                        </button>
+                        <text> </text>
+                        {(index + 1) % 5 === 0 && <br />}
+                    </React.Fragment>
+                ) )}
+
             {/*{selectedActor && <SearchTable actor={selectedActor} data={data} />}*/}
             {selectedActor && <ActorDetails actor={selectedActor} data={data} />}
         </div>
