@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Typography, List, ListItem, Box, Divider } from "@material-ui/core";
 
-// Assuming data is imported from a local json file
-// import data from './data.json';
+
 
 const ActorDetails = ({ actor, data }) => {
     const [details, setDetails] = useState({
@@ -87,6 +87,36 @@ const ActorDetails = ({ actor, data }) => {
                     </React.Fragment>)
             )}
             </ul>
+
+            <Box style={{ maxWidth: "600px", margin: "0 auto", padding: "20px", fontFamily: "Arial, sans-serif" }}>
+                <Typography variant="h4" align="center" gutterBottom>
+                    {actor}
+                </Typography>
+                <Typography variant="h6">一共参加演出: {details.showCount} 场</Typography>
+                <Typography variant="h6">第一次正式演出: {details.firstDay}</Typography>
+                <Typography variant="h6">最后一次正式演出: {details.lastDay}</Typography>
+                <Typography variant="h6">中间间隔了: {details.daysBetween} 天</Typography>
+                <Typography variant="h6">角色统计:</Typography>
+                <List>
+                    {Object.entries(details.roleCounts).map(([role, count]) => (
+                        <ListItem key={role}>{role}: {count} 场</ListItem>
+                    ))}
+                </List>
+                {details.servingCount > 0 && <ListItem>前台: {details.servingCount} 场</ListItem>}
+                <Divider style={{ margin: "20px 0" }} />
+                <Typography variant="h6">很遗憾，有很多人还没有合作过:</Typography>
+                <List>
+                    {details.neverWorkedWith.map((actor,index) =>(
+                        <React.Fragment key={actor}>
+                            <ListItem style={{display: "inline-block", width: "20%"}}>
+                                <Typography variant="body1">{actor}</Typography>
+                            </ListItem>
+                            {(index + 1) % 5 === 0 && <br />}
+                        </React.Fragment>
+                    ))}
+                </List>
+            </Box>
+
         </div>
     );
 }
