@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchTable from './SearchTable';
 import data from '../data/data.json';
+import ActorDetails from "./ShowTable";
 const RoleFilter = () => {
     const [selectedRole, setSelectedRole] = useState(null);
     const [filteredActors, setFilteredActors] = useState([]);
@@ -12,9 +13,7 @@ const RoleFilter = () => {
         data.forEach(show => {
             const cast = show.cast;
             Object.keys(cast).forEach(key => {
-                if (cast[key] && (!filteredActors.length || filteredActors.includes(cast[key]))) {
                     rolesSet.add(key);
-                }
             });
         });
         setRoles([...rolesSet]);
@@ -40,20 +39,28 @@ const RoleFilter = () => {
 
     return (
         <div>
-            {roles.map(role => (
-                <button key={role} onClick={() => handleRoleClick(role)}>
-                    {role}
-                </button>
-            ))}
+            <div>
+                <h1>浮生若梦 演出报告</h1>
+                <h2>演过的角色</h2>
+                {roles.map((role, index) => (
+                    <React.Fragment key={role}>
+                        <button onClick={() => handleRoleClick(role)}>
+                            {role}
+                        </button>
+                        {(index + 1) % 5 === 0 && <br />}
+                    </React.Fragment>
+                ))}
+            </div>
             <button onClick={()=>{
                 setSelectedRole();
                 setSelectedActor();
                 setRoles([]);
                 setFilteredActors([])}}>
                 Reset</button>
-            {selectedRole && <h3>Actors who played {selectedRole}:</h3>}
+            {selectedRole && <h3> {selectedRole} 演员列表:</h3>}
             {filteredActors.map(actor => <button key={actor} onClick={() => handleActorClick(actor)}>{actor}</button>)}
-            {selectedActor && <SearchTable actor={selectedActor} data={data} />}
+            {/*{selectedActor && <SearchTable actor={selectedActor} data={data} />}*/}
+            {selectedActor && <ActorDetails actor={selectedActor} data={data} />}
         </div>
     );
 };

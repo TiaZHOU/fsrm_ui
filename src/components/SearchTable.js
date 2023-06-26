@@ -55,14 +55,14 @@ const ActorDetails = ({ data, actor }) => {
     return (
         <div>
             <h2>{actor}</h2>
-            <p>Total shows number: {actorData.totalShows}</p>
-            <p>Serving times: {actorData.timesServed}</p>
-            <p>First show date: {actorData.firstShowDate.toLocaleDateString()}</p>
-            <p>Last show date: {actorData.lastShowDate.toLocaleDateString()}</p>
+            <p>一共演出了: {actorData.totalShows} 场</p>
+            {actorData.timesServed>0 && <p>还有 {actorData.timesServed} 场前台</p>}
+            <p>第一次演出的时间是: {actorData.firstShowDate.toLocaleDateString()}</p>
+            <p>最后一场演出是: {actorData.lastShowDate.toLocaleDateString()}</p>
             <p>
-                Days between first and last show: {actorData.daysBetweenShows}
+               演出跨度: {actorData.daysBetweenShows} 天
             </p>
-            <p>Most Acting with: {actorData.mostActedWith}</p>
+            <p>和你搭档最多的演员是: {actorData.mostActedWith}</p>
         </div>
     );
 };
