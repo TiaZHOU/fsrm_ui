@@ -16,7 +16,7 @@ const RoleFilter = () => {
             });
         });
         setRoles([...rolesSet]);
-    }, [data, filteredActors]);
+    }, [ filteredActors]);
 
     const handleRoleClick = (role) => {
         setSelectedRole(role);
