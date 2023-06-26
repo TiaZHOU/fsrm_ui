@@ -45,7 +45,7 @@ const ActorDetails = ({ actor, data }) => {
         let mostWorkedWith = '';
         let maxShowsTogether = 0;
         Object.keys(actorsWorkedWith).forEach(name => {
-            if(actorsWorkedWith[name] > maxShowsTogether) {
+            if(actorsWorkedWith[name] >= maxShowsTogether) {
                 maxShowsTogether = actorsWorkedWith[name];
                 mostWorkedWith = name;
             }
@@ -70,11 +70,14 @@ const ActorDetails = ({ actor, data }) => {
     return (
         <div>
             <h1>{actor}</h1>
-            <h2>一共参加演出: {details.showCount} 场</h2>
+            <h6>（统计来源为所有排班表中的正式场次，不包含排练、内测、跟场）</h6>
+            <h2>在过去的 {data.length} 场演出中</h2>
+            <h2>你一共参加演出: {details.showCount} 场</h2>
             <h2>第一次正式演出: {details.firstDay}</h2>
             <h2>最后一次正式演出: {details.lastDay}</h2>
             <h2>中间间隔了: {details.daysBetween} 天</h2>
             <h2>角色统计:</h2>
+            <h6>-灵殒（徐虎，袁思道）与浮生若梦分开统计，商海角色和浮生若梦一起统计-</h6>
             <ul>
                 {Object.entries(details.roleCounts).map(([role, count]) => <li key={role}>{role}: {count} 场</li>)}
             </ul>
@@ -83,11 +86,12 @@ const ActorDetails = ({ actor, data }) => {
             <ul>
                 {details.neverWorkedWith.map((actor,index) =>(
                     <React.Fragment key={actor}>
-                        <text key={actor}>{actor}- </text>
+                        <text key={actor}>{actor}  </text>
                      {(index + 1) % 5 === 0 && <br />}
                     </React.Fragment>)
             )}
             </ul>
+
         </div>
     );
 }

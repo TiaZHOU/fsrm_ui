@@ -68,7 +68,6 @@ const RoleFilter = () => {
                     </React.Fragment>
                 ) )}
 
-            {/*{selectedActor && <SearchTable actor={selectedActor} data={data} />}*/}
             {selectedActor && <ActorDetails actor={selectedActor} data={data} />}
         </div>
     );
