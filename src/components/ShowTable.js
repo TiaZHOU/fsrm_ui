@@ -89,6 +89,7 @@ const ActorDetails = ({ actor, data }) => {
             <h2>第一次正式演出: {details.firstDay}</h2>
             <h2>最后一次正式演出: {details.lastDay}</h2>
             <h2>中间间隔了: {details.daysBetween} 天</h2>
+            <h2>一共演了：{Object.entries(details.roleCounts).length} 个角色。</h2>
             <h2>角色统计:</h2>
             <h6>-灵殒（徐虎，袁思道）与浮生若梦分开统计，商海角色和浮生若梦一起统计-</h6>
             <ul>
