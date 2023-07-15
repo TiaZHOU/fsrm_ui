@@ -24,14 +24,16 @@ const ActorShowsCSVExport = ({ actor, data }) => {
 
   return (
     <>
-      <h1>{actor}</h1>
-      <CSVLink
-        data={csvData}
-        headers={csvHeaders}
-        filename={`${actor}_shows.csv`}
-      >
-        Export CSV
-      </CSVLink>
+      <div>
+        <h1>{actor}</h1>
+        <CSVLink
+          data={csvData}
+          headers={csvHeaders}
+          filename={`${actor}_shows.csv`}
+        >
+          Export data
+        </CSVLink>
+      </div>
     </>
   );
 };
