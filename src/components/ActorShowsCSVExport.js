@@ -31,7 +31,7 @@ const ActorShowsCSVExport = ({ actor, data }) => {
           headers={csvHeaders}
           filename={`${actor}_shows.csv`}
         >
-          Export data
+          Export CSV
         </CSVLink>
       </div>
     </>
