@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import data from "../data/data.json";
 import ActorDetails from "./ActorDetails";
 import "./RoleFilter.css";
@@ -13,6 +14,7 @@ const RoleFilter = () => {
   const [filteredActors, setFilteredActors] = useState([]);
   const [roles, setRoles] = useState([]);
   const [selectedActor, setSelectedActor] = useState(null);
+  const [step, setStep] = useState(1);
 
   useEffect(() => {
     const rolesSet = new Set();
@@ -45,8 +47,6 @@ const RoleFilter = () => {
     setStep((prevStep) => prevStep + 1);
   };
 
-  const [step, setStep] = useState(1);
-
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);
   };
@@ -62,6 +62,7 @@ const RoleFilter = () => {
     setRoles([]);
     setFilteredActors([]);
   };
+
   const renderStepComponent = () => {
     switch (step) {
       case 1:
@@ -70,7 +71,10 @@ const RoleFilter = () => {
         return renderActorButtons();
       case 3:
         return selectedActor ? (
-          <ActorDetails actor={selectedActor} data={data} />
+          <>
+            <ActorDetails actor={selectedActor} data={data} />
+            <ActorPresenceChart data={data} actor={selectedActor} />
+          </>
         ) : null;
       case 4:
         return selectedActor ? (
@@ -82,29 +86,26 @@ const RoleFilter = () => {
         ) : null;
       case 6:
         return selectedActor ? (
-          <ActorTitle data={data} actor={selectedActor} />
-        ) : null;
-      case 7:
-        return selectedActor ? (
-          <ActorPresenceChart data={data} actor={selectedActor} />
-        ) : null;
-      case 8:
-        return selectedActor ? (
-          <ActorShowsCSVExport data={data} actor={selectedActor} />
+          <>
+            <ActorTitle data={data} actor={selectedActor} />
+            <ActorShowsCSVExport data={data} actor={selectedActor} />
+          </>
         ) : null;
       default:
         return null;
     }
   };
 
-  const renderStepers = () => {
+  const renderSteppers = () => {
     return (
       <div>
         {renderStepComponent()}
 
         {step > 1 && <button onClick={handlePreviousStep}>Previous</button>}
 
-        {step > 2 && <button onClick={handleNextStep}>Next Step</button>}
+        {step > 2 && step < 6 && (
+          <button onClick={handleNextStep}>Next Step</button>
+        )}
 
         {step >= 3 && <button onClick={handleReset}>Reset</button>}
       </div>
@@ -120,7 +121,11 @@ const RoleFilter = () => {
         </div>
         <div className="role-buttons-container">
           {roles.map((role) => (
-            <button key={role} onClick={() => handleRoleClick(role)}>
+            <button
+              key={role}
+              onClick={() => handleRoleClick(role)}
+              className={`role-button ${selectedRole === role ? "active" : ""}`}
+            >
               {role}
             </button>
           ))}
@@ -137,7 +142,13 @@ const RoleFilter = () => {
         </h3>
         <div className="actor-buttons-container">
           {filteredActors.map((actor) => (
-            <button key={actor} onClick={() => handleActorClick(actor)}>
+            <button
+              key={actor}
+              onClick={() => handleActorClick(actor)}
+              className={`actor-button ${
+                selectedActor === actor ? "active" : ""
+              }`}
+            >
               {actor}
             </button>
           ))}
@@ -148,9 +159,11 @@ const RoleFilter = () => {
 
   return (
     <div className="role-filter-container">
-      {/*{renderRoleButtons()}*/}
-      {renderStepers()}
-      {/*{selectedActor && <ActorDetails actor={selectedActor} data={data} />}*/}
+      <TransitionGroup className="card-container">
+        <CSSTransition key={step} classNames="card" timeout={300}>
+          <div className="card">{renderSteppers()}</div>
+        </CSSTransition>
+      </TransitionGroup>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -21,19 +21,19 @@ const ActorPresenceChart = ({ data, actor }) => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={chartData}>
+      <h1>{actor}</h1>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={chartData} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis />
+          <XAxis type="number" hide />
+          <YAxis dataKey="month" type="category" />
           <Legend />
-          <Line
-            type="monotone"
+          <Bar
             dataKey="count"
-            stroke="rgba(75, 192, 192, 1)"
             fill="rgba(75, 192, 192, 0.6)"
+            stroke="rgba(75, 192, 192, 1)"
           />
-        </LineChart>
+        </BarChart>
       </ResponsiveContainer>
     </div>
   );

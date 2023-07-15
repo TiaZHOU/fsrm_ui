@@ -109,3 +109,38 @@ li {
         font-size: 14px;
     }
 }
+
+.card-container {
+    position: relative;
+    height: 100%;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-enter {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.card-enter-active {
+    opacity: 1;
+    transform: translateX(0%);
+    transition: opacity 300ms, transform 300ms;
+}
+
+.card-exit {
+    opacity: 1;
+    transform: translateX(0%);
+}
+
+.card-exit-active {
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: opacity 300ms, transform 300ms;
+}
