@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import data from "../data/data.json";
 import ActorDetails from "./ActorDetails";
 import "./RoleFilter.css";
@@ -101,13 +102,23 @@ const RoleFilter = () => {
       <div>
         {renderStepComponent()}
 
-        {step > 1 && <button onClick={handlePreviousStep}>Previous</button>}
-
-        {step > 2 && step < 6 && (
-          <button onClick={handleNextStep}>Next Step</button>
+        {step > 1 && (
+          <Button variant="contained" onClick={handlePreviousStep}>
+            Previous
+          </Button>
         )}
 
-        {step >= 3 && <button onClick={handleReset}>Reset</button>}
+        {step > 2 && step < 6 && (
+          <Button variant="contained" onClick={handleNextStep}>
+            Next Step
+          </Button>
+        )}
+
+        {step >= 3 && (
+          <Button variant="contained" onClick={handleReset}>
+            Reset
+          </Button>
+        )}
       </div>
     );
   };
@@ -116,18 +127,20 @@ const RoleFilter = () => {
     return (
       <>
         <div className="header">
-          <h1>浮生若梦 演出报告</h1>
-          <h2>角色</h2>
+          <Typography variant="h4">浮生若梦 演出报告</Typography>
+          <Typography variant="h5">角色</Typography>
         </div>
         <div className="role-buttons-container">
           {roles.map((role) => (
-            <button
+            <Button
               key={role}
               onClick={() => handleRoleClick(role)}
               className={`role-button ${selectedRole === role ? "active" : ""}`}
+              variant="contained"
+              color="primary"
             >
               {role}
-            </button>
+            </Button>
           ))}
         </div>
       </>
@@ -137,20 +150,22 @@ const RoleFilter = () => {
   const renderActorButtons = () => {
     return (
       <>
-        <h3 className="actor-list-heading">
+        <Typography variant="h5" className="actor-list-heading">
           {selectedRole} 演员列表（按上场顺序）:
-        </h3>
+        </Typography>
         <div className="actor-buttons-container">
           {filteredActors.map((actor) => (
-            <button
+            <Button
               key={actor}
               onClick={() => handleActorClick(actor)}
               className={`actor-button ${
                 selectedActor === actor ? "active" : ""
               }`}
+              variant="contained"
+              color="primary"
             >
               {actor}
-            </button>
+            </Button>
           ))}
         </div>
       </>
@@ -161,7 +176,9 @@ const RoleFilter = () => {
     <div className="role-filter-container">
       <TransitionGroup className="card-container">
         <CSSTransition key={step} classNames="card" timeout={300}>
-          <div className="card">{renderSteppers()}</div>
+          <Card className="card">
+            <CardContent>{renderSteppers()}</CardContent>
+          </Card>
         </CSSTransition>
       </TransitionGroup>
     </div>

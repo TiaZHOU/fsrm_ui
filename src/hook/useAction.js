@@ -60,7 +60,7 @@ export const useAction = (data, actor) => {
       .map(([name, count]) => `${name} (${count} 场)`);
 
     //get first 5 elements of mostWorkedWithList
-    mostWorkedWith = mostWorkedWithList.slice(2, 5).join("");
+    mostWorkedWith = mostWorkedWithList.slice(2, 5).join(" ");
 
     const getActorMonthlyPresence = () => {
       const presenceMap = new Map();
